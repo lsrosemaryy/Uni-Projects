@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NoPenalty — Team 3 Client Handout (ICA)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #2E9E76;
+    --green-dark: #1B6B50;
+    --green-light: #EAF5F0;
+    --green-mid: #C2E5D8;
+    --cream: #F8F5EE;
+    --ink: #141414;
+    --ink-mid: #3A3A3A;
+    --ink-light: #6B6B6B;
+    --red-light: #FAECEC;
+    --red: #C0392B;
+    --amber-light: #FDF3E3;
+    --amber: #D4860A;
+    --rule: #D6EDE4;
+    --rule-light: #EEF7F3;
+  }
+
+  html, body {
+    width: 210mm;
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    font-size: 8.2pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 9mm 11mm 8mm;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media print {
+    html, body { width: 210mm; margin: 0; }
+    .page { padding: 9mm 11mm 8mm; page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+    .page-divider { display: none; }
+  }
+
+  /* ── DECORATIVE BG CIRCLE ── */
+  .page::before {
+    content: '';
+    position: absolute;
+    width: 200mm;
+    height: 200mm;
+    border-radius: 50%;
+    background: radial-gradient(circle, #EAF5F0 0%, transparent 70%);
+    top: -80mm;
+    right: -80mm;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page > * { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 10px;
+    padding-bottom: 7px;
+    border-bottom: 2.5px solid var(--green);
+    margin-bottom: 9px;
+  }
+  .brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28pt;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+  .brand em { font-style: italic; color: var(--ink); }
+  .tagline {
+    font-size: 7.5pt;
+    color: var(--ink-light);
+    margin-top: 2px;
+    letter-spacing: 0.01em;
+  }
+  .ica-note {
+    font-size: 7pt;
+    color: white;
+    background: var(--green-dark);
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+  .header-right { text-align: right; }
+  .team-label {
+    font-size: 6.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-light);
+    margin-bottom: 2px;
+  }
+  .team-names {
+    font-size: 7pt;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  /* ── SECTION HEADING ── */
+  .sec {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+    margin-top: 8px;
+  }
+  .sec:first-of-type { margin-top: 0; }
+  .sec-lbl {
+    font-size: 6.3pt;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--green-dark);
+    white-space: nowrap;
+  }
+  .sec-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .stat-card {
+    background: var(--green-light);
+    border-radius: 6px;
+    padding: 6px 8px;
+    border-left: 3px solid var(--green);
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22pt;
+    color: var(--green-dark);
+    line-height: 1;
+    display: block;
+  }
+  .stat-desc { font-size: 6.8pt; color: var(--ink-mid); margin-top: 1px; line-height: 1.4; }
+  .stat-src { font-size: 6pt; color: var(--ink-light); margin-top: 2px; }
+
+  /* ── PROBLEM STATEMENT ── */
+  .ps-box {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 6px 6px 0;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+    font-size: 7.8pt;
+    color: var(--ink-mid);
+    line-height: 1.55;
+    font-style: italic;
+  }
+  .ps-box strong { color: var(--ink); font-style: normal; }
+
+  /* ── 3-COL CARDS ── */
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .c-card {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 6px 8px;
+    background: var(--cream);
+  }
+  .c-head {
+    font-size: 6.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--green-dark);
+    margin-bottom: 3px;
+  }
+  .c-card p { font-size: 7pt; color: var(--ink-mid); line-height: 1.42; }
+
+  /* ── RQ ── */
+  .rq-box {
+    background: var(--ink);
+    color: white;
+    border-radius: 7px;
+    padding: 7px 11px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 9.5pt;
+    line-height: 1.4;
+    margin-bottom: 5px;
+  }
+  .sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .sub-card {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 5px 8px;
+    background: var(--cream);
+  }
+  .sub-num {
+    font-size: 6.3pt;
+    font-weight: 600;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+  }
+  .sub-card p { font-size: 7pt; color: var(--ink-mid); line-height: 1.42; }
+
+  /* ── METHODS ── */
+  .methods-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .mc {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 6px 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .mc-num {
+    width: 15px; height: 15px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    font-size: 7pt;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .mc-title { font-weight: 600; font-size: 7.2pt; color: var(--ink); }
+  .mc p { font-size: 6.8pt; color: var(--ink-mid); line-height: 1.4; }
+  .mc-tag {
+    font-size: 6pt;
+    padding: 1px 6px;
+    border-radius: 99px;
+    font-weight: 600;
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: auto;
+  }
+  .tg { background: #DCF0E8; color: #1B6B50; border: 1px solid var(--green-mid); }
+  .to { background: #FDEEE3; color: #7A3B10; border: 1px solid #F5C7A0; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 7px;
+    padding-top: 5px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-left { font-size: 6.3pt; color: var(--ink-light); line-height: 1.5; }
+  .footer-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 12pt;
+    color: var(--green);
+    font-style: italic;
+  }
+
+  .page-divider {
+    text-align: center;
+    padding: 6px 0;
+    font-size: 7pt;
+    color: var(--ink-light);
+    border-top: 1.5px dashed var(--green-mid);
+    border-bottom: 1.5px dashed var(--green-mid);
+    margin: 4px 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── PAGE 2 ── */
+  .exp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .exp-card {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+  .exp-title {
+    font-size: 6.3pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+  .locs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .loc-chip { font-size: 6.3pt; padding: 2px 7px; border-radius: 99px; font-weight: 500; border: 1px solid; }
+  .chi { background: #FCEBEB; color: #791F1F; border-color: #F7C1C1; }
+  .chm { background: #FDF3E3; color: #633806; border-color: #FAC775; }
+  .chl { background: #EAF3DE; color: #27500A; border-color: #C0DD97; }
+  .insurer-tag {
+    display: inline-block;
+    font-size: 6.3pt;
+    background: var(--green-light);
+    color: var(--green-dark);
+    border: 1px solid var(--green-mid);
+    border-radius: 99px;
+    padding: 1px 7px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .var-list { display: flex; flex-direction: column; gap: 2px; }
+  .var-item { display: flex; align-items: flex-start; gap: 5px; font-size: 6.8pt; color: var(--ink-mid); line-height: 1.35; }
+  .vdot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; margin-top: 4px; }
+
+  .results-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .rc {
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .rc-red { background: var(--red-light); border-left: 3px solid var(--red); }
+  .rc-amb { background: var(--amber-light); border-left: 3px solid var(--amber); }
+  .rc-grn { background: var(--green-light); border-left: 3px solid var(--green); }
+  .rc-title { font-weight: 600; font-size: 7.2pt; color: var(--ink); }
+  .rc p { font-size: 6.8pt; color: var(--ink-mid); line-height: 1.4; }
+  .rtag { font-size: 5.8pt; padding: 1px 6px; border-radius: 99px; font-weight: 600; display: inline-block; align-self: flex-start; margin-top: 2px; }
+  .rt-red { background: var(--red-light); color: var(--red); }
+  .rt-amb { background: var(--amber-light); color: var(--amber); }
+  .rt-grn { background: var(--green-light); color: var(--green-dark); }
+
+  /* ── ICA CALLOUT ── */
+  .ica-callout {
+    background: var(--ink);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 11px;
+    margin-bottom: 6px;
+  }
+  .ica-callout-head {
+    font-size: 6.3pt;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 4px;
+  }
+  .ica-callout p {
+    font-size: 8pt;
+    line-height: 1.55;
+    font-family: 'DM Serif Display', serif;
+  }
+  .ica-callout .sub-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 7pt;
+    margin-top: 5px;
+    color: #B0C8C0;
+    font-style: italic;
+  }
+
+  .model-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .model-card {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+  .model-head { font-size: 7pt; font-weight: 600; margin-bottom: 4px; }
+  .mh-g { color: var(--green-dark); }
+  .mh-a { color: #854F0B; }
+  .bl-list { display: flex; flex-direction: column; gap: 3px; }
+  .bl-item { display: flex; align-items: flex-start; gap: 5px; font-size: 6.8pt; color: var(--ink-mid); line-height: 1.35; }
+  .bdot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .bd-g { background: var(--green); }
+  .bd-a { background: var(--amber); }
+
+  /* stakeholder impact */
+  .sh-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .sh-card { border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; }
+  .sh-title { font-weight: 600; font-size: 7pt; color: var(--ink); margin-bottom: 2px; }
+  .sh-card p { font-size: 6.8pt; color: var(--ink-mid); line-height: 1.4; }
+  .sh-chal { color: var(--red) !important; font-weight: 500; }
+  .sh-opp { color: var(--green-dark) !important; font-weight: 500; }
+
+  /* model structure */
+  .model-struct {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+  .ms-card { border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; }
+  .ms-head { font-size: 6.3pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+  .ms-card p { font-size: 6.8pt; color: var(--ink-mid); line-height: 1.4; }
+
+  /* conclusion bar */
+  .conclusion-bar {
+    background: var(--green-light);
+    border: 1px solid var(--green-mid);
+    border-radius: 7px;
+    padding: 7px 10px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 0;
+  }
+  .conc-icon {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18pt;
+    color: var(--green);
+    line-height: 1;
+    flex-shrink: 0;
+    font-style: italic;
+  }
+  .conclusion-bar p {
+    font-size: 7.5pt;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+  .conclusion-bar strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ PAGE 1 ═══════════════════════════ -->
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="brand">No<em>Penalty</em></div>
+      <div class="tagline">A revision of AI's role in Insurance &nbsp;·&nbsp; Prepared for the Insurance Council of Australia &nbsp;·&nbsp; University of Sydney ICPU 2025</div>
+      <div class="ica-note">Client briefing document — ICA General Insurance Code of Practice revision</div>
+    </div>
+    <div class="header-right">
+      <div class="team-label">Team 3</div>
+      <div class="team-names">Rosemary · Aryan · Mandie<br>Trevor · Enda · Vin</div>
+    </div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="sec"><div class="sec-lbl">The situation</div><div class="sec-rule"></div></div>
+  <div class="stat-row">
+    <div class="stat-card">
+      <span class="stat-num">70%</span>
+      <div class="stat-desc">of households in the highest flood-risk zones earn below the national median income of $92,000</div>
+      <div class="stat-src">ICA, 2025</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">77%</span>
+      <div class="stat-desc">of households in high flood-risk zones have no flood cover at all</div>
+      <div class="stat-src">Giblett, 2025</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">51%</span>
+      <div class="stat-desc">rise in home insurance premiums over the last five years — and growing</div>
+      <div class="stat-src">Miller, 2026</div>
+    </div>
+  </div>
+
+  <!-- PROBLEM STATEMENT -->
+  <div class="sec"><div class="sec-lbl">Problem Statement</div><div class="sec-rule"></div></div>
+  <div class="ps-box">
+    AI's ability to analyse data at an individual level could result in <strong>systematic biases</strong> for low-income and other vulnerable households in high flood-risk areas who, faced with stagnant wages and rising insurance costs, increasingly experience acute affordability stress — leading to <strong>mass disengagement from home and contents insurance</strong> and an increased susceptibility to a financial spiral following a natural disaster.
+  </div>
+  <div class="three-col">
+    <div class="c-card">
+      <div class="c-head">Who</div>
+      <p>Disproportionately: renters, migrants, single parents, and First Nations households living in flood-prone areas because housing is cheaper there</p>
+    </div>
+    <div class="c-card">
+      <div class="c-head">What's causing it</div>
+      <p>AI-driven individualised pricing creates systematic biases on top of already stagnant wages and rising baseline premiums — a compounding effect</p>
+    </div>
+    <div class="c-card">
+      <div class="c-head">What happens</div>
+      <p>They disengage from insurance entirely, leaving them with no financial buffer when disaster hits — costs then fall on government and society</p>
+    </div>
+  </div>
+
+  <!-- STAKEHOLDERS -->
+  <div class="sec"><div class="sec-lbl">Who is affected</div><div class="sec-rule"></div></div>
+  <div class="sh-row">
+    <div class="sh-card">
+      <div class="sh-title">Low-income homeowners</div>
+      <p>Structurally trapped in high-risk areas. Flood-prone homes are worth ~$75,500 less than comparable safe properties — they cannot sell and leave. After the 2010–11 floods, low-income earners lost an average of $3,100 in 2012 while middle-income earners had fully recovered.</p>
+    </div>
+    <div class="sh-card">
+      <div class="sh-title">Insurers and the ICA</div>
+      <p>AI models trained on biased historical data can penalise postcode and socioeconomic status rather than actual individual risk. ICA's current Code of Practice Part 9 lacks specific, enforceable constraints on AI-driven pricing decisions — a gap this research directly addresses.</p>
+    </div>
+    <div class="sh-card">
+      <div class="sh-title">Society at large</div>
+      <p>Natural disasters are inequality-amplifying events. 80% of disaster recovery funds after the 2010–11 Queensland floods went to businesses, not households. Underinsured communities create long-term costs that extend well beyond the affected individuals.</p>
+    </div>
+  </div>
+
+  <!-- RQ -->
+  <div class="sec"><div class="sec-lbl">Research Question</div><div class="sec-rule"></div></div>
+  <div class="rq-box">"What level of detail should AI be allowed to interrogate without imposing traps on low-income consumers?"</div>
+  <div class="sub-grid">
+    <div class="sub-card">
+      <div class="sub-num">Sub-question 1</div>
+      <p>How do AI underwriting models actually operationalise risk — what data inputs, weighting systems, and feedback loops characterise current Australian practice?</p>
+    </div>
+    <div class="sub-card">
+      <div class="sub-num">Sub-question 2</div>
+      <p>What regulatory or industry-led mechanisms have been globally effective in constraining the exclusionary effects of individualised risk pricing?</p>
+    </div>
+  </div>
+
+  <!-- METHODS -->
+  <div class="sec"><div class="sec-lbl">How we researched it — Double Diamond framework</div><div class="sec-rule"></div></div>
+  <div class="methods-grid">
+    <div class="mc">
+      <div class="mc-num">1</div>
+      <div class="mc-title">Literature review</div>
+      <p>Academic sources on algorithmic fairness, underinsurance, and flood risk. Supplemented by ICA, Actuaries Institute, and AIHW reports. Coded by disciplinary lens across team members.</p>
+      <span class="mc-tag tg">As planned</span>
+    </div>
+    <div class="mc">
+      <div class="mc-num">2</div>
+      <div class="mc-title">Case analysis</div>
+      <p>Redicova (parametric cyclone product, Far North QLD) as a model of equitable automated insurance. ICA General Insurance Code of Practice as the governance benchmark.</p>
+      <span class="mc-tag tg">As planned</span>
+    </div>
+    <div class="mc">
+      <div class="mc-num">3</div>
+      <div class="mc-title">Policy analysis</div>
+      <p>Assessed ICA Code Part 9 against AI-driven pricing risks during the live rewrite window. Compared with EU AI Act and international fairness audit mechanisms.</p>
+      <span class="mc-tag tg">As planned</span>
+    </div>
+    <div class="mc">
+      <div class="mc-num">4</div>
+      <div class="mc-title">Controlled experiment</div>
+      <p>Two proxy insurance tests — location vs. location across five postcodes, and variable isolation at a fixed address. Primary data on what insurers actually interrogate.</p>
+      <span class="mc-tag to">Added — ICA suggestion</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      Page 1 of 2 &nbsp;·&nbsp; ICPU 2025 &nbsp;·&nbsp; University of Sydney &nbsp;·&nbsp; Prepared for the Insurance Council of Australia<br>
+      Key sources: Giblett (2025) · Miller (2026) · ICA (2025) · van Bekkum et al. (2025) · Booth &amp; Tranter (2017) · Ulubasoglu (2020)
+    </div>
+    <div class="footer-brand">NoPenalty</div>
+  </div>
+</div>
+
+<div class="page-divider">— continued overleaf —</div>
+
+<!-- ═══════════════════════════ PAGE 2 ═══════════════════════════ -->
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="brand" style="font-size:20pt;">No<em>Penalty</em></div>
+      <div class="tagline">Experiment results, recommendation, and what this means for the ICA Code of Practice revision</div>
+    </div>
+    <div class="header-right">
+      <div class="team-label">Team 3 — Page 2</div>
+    </div>
+  </div>
+
+  <!-- EXPERIMENT -->
+  <div class="sec"><div class="sec-lbl">Controlled experiment — proxy insurance testing</div><div class="sec-rule"></div></div>
+  <div class="exp-row">
+    <div class="exp-card">
+      <div class="exp-title">Test 1 — Location vs. location</div>
+      <p style="font-size:6.8pt; color:var(--ink-mid); margin-bottom:5px;">Same person, same insurer, same application. Only the postcode changed across five locations with varying flood risk profiles.</p>
+      <div class="locs">
+        <span class="loc-chip chi">Lismore NSW — High flood</span>
+        <span class="loc-chip chm">Westmead NSW — Moderate</span>
+        <span class="loc-chip chi">Cairns North QLD — High flood</span>
+        <span class="loc-chip chl">Carlton VIC — Lower risk</span>
+        <span class="loc-chip chl">Mt Lawley WA — Lower risk</span>
+      </div>
+      <p style="font-size:6.5pt; color:var(--ink-light);">Reveals how much location alone moves the premium and changes the questions insurers ask.</p>
+    </div>
+    <div class="exp-card">
+      <div class="exp-title">Test 2 — Variable isolation</div>
+      <span class="insurer-tag">NRMA — single insurer &nbsp;·&nbsp; 77 Fuller St, Mount Druitt NSW 2770</span>
+      <p style="font-size:6.8pt; color:var(--ink-mid); margin-bottom:4px;">Six applications submitted. One variable changed at a time against baseline (Rosemary, DoB 28/06/1970) — premium $1,732.18/yr.</p>
+      <div class="var-list">
+        <div class="var-item"><div class="vdot"></div>Age: 55 → 22 &nbsp;(+$126.11 per year)</div>
+        <div class="var-item"><div class="vdot"></div>Occupancy: owner → renter &nbsp;(building cover unavailable entirely)</div>
+        <div class="var-item"><div class="vdot"></div>Claims history: none → one flood claim in 5 years &nbsp;(-$23.27)</div>
+        <div class="var-item"><div class="vdot"></div>Multi-product discount: added NRMA car policy &nbsp;(-$87.02 / 5% discount)</div>
+        <div class="var-item"><div class="vdot"></div>Loyalty: new → existing NRMA member &nbsp;(-$114.77)</div>
+        <div class="var-item"><div class="vdot"></div>Security alarm: none → monitored alarm &nbsp;(+$0.39 — negligible)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="sec"><div class="sec-lbl">What our experiment found</div><div class="sec-rule"></div></div>
+  <div class="results-row">
+    <div class="rc rc-red">
+      <div class="rc-title">Market withdrawal in high-risk areas</div>
+      <p>In Lismore and Cairns, QBE, YOUI, and Budget Direct refused to quote online or withdrew coverage entirely. The households most exposed to flood risk had no access to the market — the algorithm closed the door before a human ever looked at the case.</p>
+      <span class="rtag rt-red">Test 1 — Location</span>
+    </div>
+    <div class="rc rc-amb">
+      <div class="rc-title">Age and loyalty visibly shift premiums</div>
+      <p>A 22-year-old paid $126 more per year than a 55-year-old for the same property. Loyalty discounts saved returning customers $115 — systematically disadvantaging those who switch providers due to financial hardship, the very people the Code should protect.</p>
+      <span class="rtag rt-amb">Test 2 — Variable isolation</span>
+    </div>
+    <div class="rc rc-grn">
+      <div class="rc-title">Renters structurally excluded</div>
+      <p>Switching occupancy from owner to renter made building insurance entirely unavailable — only contents cover could be accessed. Renters, who are disproportionately low-income, cannot access the cover they need regardless of willingness to pay.</p>
+      <span class="rtag rt-grn">Test 2 — Variable isolation</span>
+    </div>
+  </div>
+
+  <!-- ICA CALLOUT -->
+  <div class="sec"><div class="sec-lbl">Our recommendation to the ICA</div><div class="sec-rule"></div></div>
+  <div class="ica-callout">
+    <div class="ica-callout-head">NoPenalty — for inclusion in the revised General Insurance Code of Practice</div>
+    <p>We recommend the ICA highly encourage the adoption of a transparent weighting model — NoPenalty — incorporating a human-in-the-loop element. The model provides a case-by-case premium estimate to potential customers, but leaves room for human review and possible recalculation before a final decision is made.</p>
+    <div class="sub-note">The model prices physical risk (flood zone, rebuild value, bushfire exposure, claims history), discloses hardship signals for transparency, and removes unfair social penalties. Insurers retain flexibility to set their own weightings — general limits could be set within the Code to ensure accessibility and fairness.</div>
+  </div>
+
+  <!-- MODEL STRUCTURE -->
+  <div class="model-struct">
+    <div class="ms-card">
+      <div class="ms-head" style="color:var(--green-dark);">Price these — physical risk</div>
+      <p>Flood zone · Rebuild value · Roof age · Bushfire exposure · Claims history · Mitigation measures</p>
+    </div>
+    <div class="ms-card">
+      <div class="ms-head" style="color:var(--amber);">Disclose, don't penalise — social proxies</div>
+      <p>Income · Payment frequency · Lapse history · Language access · Employment status · Household type</p>
+    </div>
+    <div class="ms-card">
+      <div class="ms-head" style="color:var(--green-dark);">Human review triggers</div>
+      <p>Any case where the algorithm would decline to quote, withdraw coverage, or produce a premium above a defined threshold — reviewed before final decision.</p>
+    </div>
+  </div>
+
+  <!-- BENEFITS / LIMITATIONS -->
+  <div class="model-row">
+    <div class="model-card">
+      <div class="model-head mh-g">Benefits for the ICA and policyholders</div>
+      <div class="bl-list">
+        <div class="bl-item"><div class="bdot bd-g"></div>Guaranteed human oversight — no automated decision is final without review</div>
+        <div class="bl-item"><div class="bdot bd-g"></div>Transparency to consumers on what is driving their premium and why</div>
+        <div class="bl-item"><div class="bdot bd-g"></div>Actionable feedback — guidance on steps that may lower premiums</div>
+        <div class="bl-item"><div class="bdot bd-g"></div>Industry leadership position for ICA — aligns with EU AI Act standards</div>
+        <div class="bl-item"><div class="bdot bd-g"></div>New market access for uninsured high-risk households; growth opportunity for insurers</div>
+      </div>
+    </div>
+    <div class="model-card">
+      <div class="model-head mh-a">Limitations to consider</div>
+      <div class="bl-list">
+        <div class="bl-item"><div class="bdot bd-a"></div>More time and manpower per quote — additional stages between application and decision</div>
+        <div class="bl-item"><div class="bdot bd-a"></div>Social factors can be complex for both AI and humans to consistently weigh</div>
+        <div class="bl-item"><div class="bdot bd-a"></div>Does not make insurance affordable in isolation — addresses fairness, not premium levels</div>
+        <div class="bl-item"><div class="bdot bd-a"></div>Coefficients are illustrative — must be calibrated with real claims data before live use</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="sec"><div class="sec-lbl">The future of NoPenalty</div><div class="sec-rule"></div></div>
+  <div class="conclusion-bar">
+    <div class="conc-icon">N</div>
+    <p>The problem is unintended biases stemming from AI's oversight in data processing. Our solution — <strong>revised AI models restricted to certain levels of data access, with human supervision</strong> — gives the ICA a mechanism to regulate AI usage in a way that abides by ethical and social considerations. NoPenalty does not eliminate the complexity of insurance pricing. But it ensures that when an algorithm closes the door on a vulnerable customer, <strong>a human has the chance to open it again.</strong></p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      Page 2 of 2 &nbsp;·&nbsp; ICPU 2025 &nbsp;·&nbsp; University of Sydney &nbsp;·&nbsp; Prepared for the Insurance Council of Australia<br>
+      Full reference list: Actuaries Institute (2023, 2024, 2025) · Booth &amp; Tranter (2017) · Giblett (2025) · ICA Code Part 9 · Miller (2026) · Ulubasoglu (2020) · van Bekkum et al. (2025)
+    </div>
+    <div class="footer-brand">NoPenalty</div>
+  </div>
+
+</div>
+</body>
+</html>
